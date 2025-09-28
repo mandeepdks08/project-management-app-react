@@ -15,29 +15,36 @@ const projects = [
 
 function App() {
   const [addingProject, setAddingProject] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
 
-  const showNoProjectSelectedPage = !addingProject && !selectedProject;
+  const showNoProjectSelectedPage = !addingProject && selectedProjectIndex === null;
+  const selectedProject = selectedProjectIndex !== null ? projects.at(selectedProjectIndex) : null;
+  console.log(selectedProject);
 
   function addProjectHandler() {
     setAddingProject(true);
-    setSelectedProject(null);
+    setSelectedProjectIndex(null);
   }
 
-  function showProjectHandler(title) {
+  function showProjectHandler(projectIndex) {
+    console.log(projectIndex);
     if (addingProject) handleCancelProjectAddition();
-    const project = projects.filter(project => project.title === title).at(0);
-    setSelectedProject(project);
+    setSelectedProjectIndex(projectIndex);
   }
 
   function handleCancelProjectAddition() {
     setAddingProject(false);
-    setSelectedProject(null);
+    setSelectedProjectIndex(null);
   }
 
   function afterNewProjectSave() {
     setAddingProject(false);
-    setSelectedProject(null);
+    setSelectedProjectIndex(null);
+  }
+
+  function handleProjectDelete() {
+    projects.splice(selectedProjectIndex, 1);
+    setSelectedProjectIndex(null);
   }
 
   return (
@@ -47,7 +54,7 @@ function App() {
         <ProjectsList projects={projects} addProjectHandler={addProjectHandler} showProjectHandler={showProjectHandler} />
         {showNoProjectSelectedPage && <NoProjectSelected addProjectHandler={addProjectHandler} />}
         {addingProject && <AddProjectForm projects={projects} onCancel={handleCancelProjectAddition} afterSave={afterNewProjectSave} />}
-        {selectedProject && <ProjectView project={selectedProject} />}
+        {selectedProject && <ProjectView project={selectedProject} onDelete={handleProjectDelete} />}
       </main>
     </div>
   );
