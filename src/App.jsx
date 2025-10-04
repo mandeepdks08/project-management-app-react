@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const projects = [
   {
-    title: 'Mastering React',
+    title: 'Mastering React!',
     description: 'My plan is to master react',
     dueDate: "Dec 29, 2024",
     tasks: []
